@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{IA-64: CPU Architecture Report}
+\author{Vedant Chaudhari}
+\date{April 2018}
+
+\begin{document}
+
+\maketitle
+
+\section{Technology Overview}
+
+Itanium-64 (IA-64) is a family of \textbf{64-bit microprocessors}, produced from 2001 -  2018 (present), the architecture originated at Hewlett-Packard (HP) but was later jointly developed by HP and Intel. The Itanium architecture is geared towards the enterprise server and high-performance computing market segments.
+
+Microprocessors that use the Itanium-64 instruction set architecture (ISA) include:
+\begin{itemize}
+    \item Itanium: Merced (2001)
+    \item Itanium 2: Mckinley (2002 - 2010)
+    \item Itanium 9300: Tukwila (2010)
+    \item Itanium 9500: Poulson (2012)
+    \item Itanium 9700: Kittson (2017)
+\end{itemize}
+
+\section{Architecture History}
+In 1989, HP began researching a new architecture in response to growing concerns that Reduced Instruction Set Computing (RISC) was approaching a processing limit at one instruction per cycle. Previously, in 1980, Yale researchers were developing an architecture known as Very Long Instruction Word (VLIW). VLIW sends multiple instructions encoded in a single long instruction word to facilitate a processor executing multiple instructions per a clock cycle.
+
+In 1994, HP and Intel partnered to create the IA-64 ISA as they believed developing proprietary architectures for high-end/niche computing was no longer cost-effective. Both companies aimed to find increased opportunities for parallel execution at compile time, simplify processor design, and reduce energy consumption by eliminating run time scheduling circuitry.
+
+Analysts predicted that IA-64 would dominate the market, eventually supplanting RISC and CISC for all computing, causing both companies to pump billions into the project. Many dubbed the endeavour as the "Itanic" poking fun at the "unsinkable" nature of it. Upon release in 2001, due to unforeseen complications, Itanium fell below expectations and it's performance was sub par compared to that of CISC or RISC.
+
+Intel quickly followed up with the Itanium 2 in 2002 which fixed many of the woes of its predecessor predominantly being performance issues due to an inefficient memory subsystem. Furthermore, AMD's release of it's own 64-bit microprocessor (X86-64) dubbed \textbf{Opteron} which was a direct upgrade from X86. This prompted Intel to release it's \textbf{Xeon} line based on the same architecture in response.
+
+Despite Xeon's release, Intel still believes in Itanium and release a major upgrade in 2010 with the release of the Itanium 9300. Release with greater performance and memory capacity due to the inclusion of technologies such as: Double-Device Data Correction (DDDC), Intel QuickPath Connect (QPI) which raised inter-processor/memory bandwidth, and four separate memory controllers. 
+
+The Itanium 9700, released in 2017, is vastly closer to Intel's vision for their Itanium line. It is built to massively take advantage of parallelism and multi-threading especially in virtualization. It includes an advanced multi-threading that uses multiple threads to boost the performance of a single thread. 
+
+Unfortunately, Itanium never become a high-volume product like Intel and HP had envisioned. One analyst predicted that only 55,000 Itanium computers had been sold in 2007, compared to 8.4 million X86-64 servers. Intel will no longer produce Itanium processors after 2017, instead focusing efforts on their Xeon line of processors.
+
+\section{Pipeline Structure}
+Intel Itanium Architecture is a \textit{64-bit register-rich} explicitly \textbf{parallel} architecture. The IA-64 architecture implements \textbf{predication}, \textbf{speculation}, and \textbf{branch prediction}.
+
+\begin{itemize}
+    \item[$\square$] \textbf{Predication:} Architectural feature that works by executing instructions from both paths of the branch and only permitting those instructions from the path that modifys the architectural state.
+    \item[$\square$] \textbf{Speculation:} "Speculative Execution" is an CPU optimization technique wherein the computer performs tasks before they are needed (even if it may never be required). The objective is to increase concurrency if resources permit.
+    \item[$\square$] \textbf{Branch Prediction:} A digital circuit that guesses a branch's direction (if-then-else structure). It's purpose is to improve the flow in an instruction pipeline, it is critical for achieving high-performance in modern pipe lined architectures including x86-64.
+ \end{itemize}   
+ 
+Furthermore, IA-64 uses a hardware register renaming mechanism rather than simple register windowing for parameter passing. This mechanism is used to permit the parallel execution of loops. The compiler is responsible for speculation, prediction, predication, and renaming using extra bits in each instruction word.
+
+Each 128-bit instruction word containers \textbf{three} instructions from which up to 2 instructions can be read per clock-cycle using the fetch mechanism via the L1 cache. This lets the CPU execute six instructions per clock cycle when properly optimized by the compiler. Itanium processors have 30 functional execution units in eleven groups which include:
+\begin{itemize}
+    \item 6 General Purpose ALU, 2 Integer Units, 1 Shift Unit
+    \item 4 Data Cache Units
+    \item 6 Multimedia Units, 2 Parallel Shift Units, 1 Parallel Multiply Unit, 1 Population Count Unit
+    \item 2 82-bit Floating-Point Multiple-Accumulate Units, 2 SIMD Floating-Point Multiply-Accumulate Units
+    \item 3 Branch Units
+\end{itemize}
+The approach outline above is the distinguishing characteristic of the Itanium architecture.
+
+\section{Memory Specifications}
+Intel has used 2 different memory architectures during Itanium development. Intel used a shared common cache hierarchy for the Itanium 2 release from 2002 to 2006. These processors had 2 16KB units of L1 cache used for instructions and data separately. L2 cache is a unified (both instructions and data) 265kb, it could handle semaphore operations without requiring the ALU. L3 cache varied from 1.5mb to 24mb. Main Memory is accessed through the Itanium 2 bus to an off-chip chipset. Speed has increased with processor releases from 200mhz (6.4GB/s) to 533mhz(12.056GB/s).
+
+In 2005, Intel developed the IA-32 Execution Layer (IA-32 EL) which was a software emulator eliminating the need for hardware support. With IA-32 Code falling behind in performance, this execution layer was designed to be run on the contemporaneous x86 processors available from Intel. This project was dubbed \textbf{Montecito}.
+
+Enhancements in this release include:
+\begin{itemize}
+    \item[$\square$] Hardware Multithreading: Each processor core maintains two executing threads. When one thread stalls for memory access, the other thread picks up the slack.
+    \item[$\square$] Hardware Based Virtualization: Intel Virtualization Technology (Intel VT-i) provides hardware assists for core virtualization functions.
+    \item[$\square$] Cache Enhancements: Added a split L2 cache which included 1mb for instructions and the original 256kb for data. Up to 12mb of additional L3 on-die cache was available.
+\end{itemize}
+
+\section{Notes:}
+As of May 2017, Intel has shipped the Itanium 9700 (Kittson) series and has stated it is the final generation of Itanium processors.
+
+\end{document}
